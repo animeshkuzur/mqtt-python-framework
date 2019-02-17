@@ -1,0 +1,35 @@
+{
+	"app":{
+		"name":"sabad",
+		"key":"NULL",
+		"debug":"true",
+		"version":"v0"
+	},
+
+	"mysql":{
+		"host":"localhost",
+        "user":"root",
+        "password":"password",
+        "database":"database"
+	},
+
+	"wifi":{
+		"ssid":"NULL",
+		"key_mgmt":"true",
+		"password":"NULL"
+	},
+
+	"hotspot":{
+		"ssid":"sabad_player",
+		"key_mgmt":"true",
+		"password":"password"
+	},
+
+	"mqtt_broker":{
+		"host":"localhost",
+		"port":"1883",
+		"key_mgmt":"false",
+		"username":"NULL",
+		"password":"NULL"
+	}
+}
