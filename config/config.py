@@ -1,8 +1,11 @@
 import json
 from os.path import abspath, isfile
 import sys
+import subprocess
 
 json_path = abspath("./config.json")
+
+INTERFACE = None
 
 try:
 	if(isfile(json_path)!=True):
@@ -13,6 +16,21 @@ try:
 except Exception as e:
 	print('Failed to read file: config.json')
 	print('Invalid json')
+	print(e)
+	sys.exit()
+
+try:
+	ps = subprocess.Popen(['iw','dev'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	for line in ps.stdout:
+		row = line.decode()
+		row = row.replace('\t','')
+		row = row.replace('\n','')
+		row = row.split(' ')
+		if "Interface" in row:
+			INTERFACE = row[1]
+			break
+except Exception as e:
+	print('Unable to find wireless Interface')
 	print(e)
 	sys.exit()
 
@@ -49,6 +67,7 @@ try:
 		BROKER_PASSWORD = data['mqtt_broker']['password']
 
 	CONFIG={
+		'interface':INTERFACE,
 		'app_name':APP_NAME,
 		'app_debug':APP_DEBUG,
 		'app_key':APP_KEY,

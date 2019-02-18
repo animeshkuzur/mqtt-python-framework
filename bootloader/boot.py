@@ -12,15 +12,27 @@ class Boot():
 
 	def start(self):
 		self.log.print("validating wifi credentials...","OK")
-		self.check_wifi()
+		while True:
+			if(self.manage_wifi()):
+				break
+		self.log.print("Configuration complete...","OK")
+		self.log.print("Starting new instance of the app...","OK")
+		app=App(CONFIG['app_name'],CONFIG['app_key'],CONFIG['app_version'])
+		app.start()
 
-	def check_wifi(self):
-		wifi=Wifi(CONFIG['wifi_ssid'],CONFIG['wifi_key_mgmt'],CONFIG['wifi_password'])
-		if(wifi.check()):
-			app=App(CONFIG['app_name'],CONFIG['app_key'],CONFIG['app_version'])
-			app.start()
+	def manage_wifi(self):
+		wifi=Wifi(CONFIG['interface'],CONFIG['wifi_ssid'],CONFIG['wifi_key_mgmt'],CONFIG['wifi_password'])
+		status=wifi.status() 
+		if(status>=0):
+			if(status==1):
+				return True
+			if(status==0):
+				if(wifi.check()):
+					pass
+					return False
 		else:
-			if(wifi.connect()):
+			if(wifi.check()):
 				pass
+				return False
 			
 
