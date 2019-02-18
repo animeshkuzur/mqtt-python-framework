@@ -2,4 +2,4 @@ __pycache__/
 config.json
 *.pyc
 *.pyo
-logs/*
+logs/
