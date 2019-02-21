@@ -31,8 +31,8 @@ class Wifi():
 				self.log.print("Unable to connect to wifi: "+self._ssid+"...","OK")
 				return False
 			ps = subprocess.Popen(['wpa_supplicant','-q','-B','-i',self._interface,'-D','nl80211,wext','-c',self._wpa_supplicant], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-			time.sleep(10)
-			self.log.print("Connection to wifi: "+self._ssid+"successful...","OK")
+			time.sleep(15)
+			self.log.print("Connection to wifi: "+self._ssid+" successful...","OK")
 			return True
 		except subprocess.CalledProcessError as e:
 			self.log.print("Error Initiating a new connection with: "+self._ssid+"...",format(e))
@@ -45,6 +45,7 @@ class Wifi():
 		try:
 			self.log.print("Disconnecting from the current wifi network...","OK")
 			ps = subprocess.Popen(['killall','wpa_supplicant'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+			time.sleep(5)
 			return True
 		except Exception as e:
 			self.log.print("Unable to disconnect...",e)
@@ -98,6 +99,7 @@ class Wifi():
 				if('command failed: Network is down (-100)' in line.decode()):
 					self.log.print("Wireless Interface "+self._interface+" down...","OK")
 					pps = subprocess.Popen(['ip','link','set',self._interface,'up'],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+					time.sleep(5)
 					self.log.print("Enabling Wireless Interface "+self._interface+" up...","OK")
 					return False
 				else:
