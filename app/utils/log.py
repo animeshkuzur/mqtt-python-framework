@@ -1,3 +1,6 @@
+# LOG MODULE
+# utility script containing all the log and debug related functions
+
 from time import gmtime, strftime
 from config.config import APP_DEBUG
 from os.path import abspath, isfile

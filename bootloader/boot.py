@@ -1,3 +1,6 @@
+# BOOTLOADER SCRIPT
+# configures the wifi and then starts the app
+
 from config.config import CONFIG
 from app.utils.log import Log
 from app.utils.wifi import Wifi
@@ -22,17 +25,35 @@ class Boot():
 
 	def manage_wifi(self):
 		wifi=Wifi(CONFIG['interface'],CONFIG['wifi_ssid'],CONFIG['wifi_key_mgmt'],CONFIG['wifi_password'])
-		status=wifi.status() 
+		status=wifi.status()
 		if(status>=0):
 			if(status==1):
 				return True
 			if(status==0):
-				if(wifi.check()):
-					pass
+				if(wifi.scan()):
+					wifi.disconnect()
+					wifi.connect()
 					return False
+				else:
+					self.log.print("Creating a hotstop to configure the device...","OK")
+					hotspot=Hotspot(CONFIG['interface'],CONFIG['hotspot_ssid'],CONFIG['hotspot_key_mgmt'],CONFIG['hotspot_password'])
+					if(hotspot.create()):
+						return True
+					else:
+						self.log.print("Unable to create the hotspot...","OK")
+						return False
 		else:
-			if(wifi.check()):
-				pass
+			if(wifi.scan()):
+				wifi.disconnect()
+				wifi.connect()
 				return False
-			
+			else:
+				self.log.print("Creating a hotstop to configure the device...","OK")
+				hotspot=Hotspot(CONFIG['interface'],CONFIG['hotspot_ssid'],CONFIG['hotspot_key_mgmt'],CONFIG['hotspot_password'])
+				if(hotspot.create()):
+					return True
+				else:
+					self.log.print("Unable to create the hotspot...","OK")
+					return False
+
 

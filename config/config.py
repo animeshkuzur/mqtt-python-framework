@@ -1,3 +1,6 @@
+# CONFIGURATION MODULE
+# reads the config.json file and initializes the global variables
+
 import json
 from os.path import abspath, isfile
 import sys
